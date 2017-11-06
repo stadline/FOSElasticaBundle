@@ -33,6 +33,10 @@ class SliceFetcher implements SliceFetcherInterface
      */
     public function fetch($queryBuilder, $limit, $offset, array $previousSlice, array $identifierFieldNames)
     {
+        if (empty($previousSlice)) {
+            $this->lastId = 0;
+        }
+
         if (!$queryBuilder instanceof QueryBuilder) {
             throw new InvalidArgumentTypeException($queryBuilder, 'Doctrine\ORM\QueryBuilder');
         }
@@ -61,6 +65,7 @@ class SliceFetcher implements SliceFetcherInterface
 
         $this->lastId = (end($results))->getId();
         reset($results);
+
         return $results;
     }
 }

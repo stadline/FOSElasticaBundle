@@ -34,7 +34,7 @@ class SliceFetcher implements SliceFetcherInterface
     public function fetch($queryBuilder, $limit, $offset, array $previousSlice, array $identifierFieldNames)
     {
         if (empty($previousSlice)) {
-            $this->lastId = 0;
+            $this->lastId = $offset;
         }
 
         if (!$queryBuilder instanceof QueryBuilder) {

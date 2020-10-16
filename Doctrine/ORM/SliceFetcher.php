@@ -63,7 +63,10 @@ class SliceFetcher implements SliceFetcherInterface
             ->getResult()
         ;
 
-        $this->lastId = (end($results))->getId();
+        if (0 !== \count($results)) {
+            $this->lastId = (end($results))->getId();
+        }
+
         reset($results);
 
         return $results;

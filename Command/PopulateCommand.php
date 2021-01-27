@@ -66,6 +66,7 @@ class PopulateCommand extends ContainerAwareCommand
             ->addOption('no-reset', null, InputOption::VALUE_NONE, 'Do not reset index before populating')
             ->addOption('no-delete', null, InputOption::VALUE_NONE, 'Do not delete index after populate')
             ->addOption('offset', null, InputOption::VALUE_REQUIRED, 'Start indexing at offset', 0)
+            ->addOption('count', null, InputOption::VALUE_REQUIRED, 'Number of object to index', 0)
             ->addOption('sleep', null, InputOption::VALUE_REQUIRED, 'Sleep time between persisting iterations (microseconds)', 0)
             ->addOption('batch-size', null, InputOption::VALUE_REQUIRED, 'Index packet size (overrides provider config option)')
             ->addOption('ignore-errors', null, InputOption::VALUE_NONE, 'Do not stop on errors')
@@ -108,6 +109,7 @@ class PopulateCommand extends ContainerAwareCommand
             'reset' => $reset,
             'ignore_errors' => $input->getOption('ignore-errors'),
             'offset' => $input->getOption('offset'),
+            'count' => $input->getOption('count'),
             'sleep' => $input->getOption('sleep'),
         ];
 

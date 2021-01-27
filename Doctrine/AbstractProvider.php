@@ -91,8 +91,13 @@ abstract class AbstractProvider extends BaseAbstractProvider
         $manager = $this->managerRegistry->getManagerForClass($this->objectClass);
 
         $queryBuilder = $this->createQueryBuilder($options['query_builder_method']);
-        $nbObjects = $this->countObjects($queryBuilder);
+        $countObjects =  $options['count'];
         $offset = $options['offset'];
+
+        $nbObjects = $this->countObjects($queryBuilder);
+        if ( $countObjects != 0 && $countObjects+$offset <  $nbObjects ) {
+            $nbObjects = $countObjects+$offset;
+        }
 
         $objects = [];
         for (; $offset < $nbObjects; $offset += $options['batch_size']) {
@@ -143,6 +148,7 @@ abstract class AbstractProvider extends BaseAbstractProvider
             'debug_logging' => false,
             'ignore_errors' => false,
             'offset' => 0,
+            'count' => 0,
             'query_builder_method' => 'createQueryBuilder',
             'sleep' => 0,
         ]);

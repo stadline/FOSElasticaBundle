@@ -42,7 +42,6 @@ class SliceFetcher implements SliceFetcherInterface
         }
 
         $rootAlias = $queryBuilder->getRootAliases()[0];
-
         /*
          * An orderBy DQL  part is required to avoid feching the same row twice.
          * @see http://stackoverflow.com/questions/6314879/does-limit-offset-length-require-order-by-for-pagination
@@ -56,8 +55,21 @@ class SliceFetcher implements SliceFetcherInterface
             }
         }
 
-        $results = $queryBuilder
-            ->where("$rootAlias.id > $this->lastId")
+	if ( $offset > 0 && $this->lastId == 0 ) {
+          $firstOffsetQueryBuilder = clone $queryBuilder;
+          $firstOffsetRow = $firstOffsetQueryBuilder->
+		setMaxResults(1)->
+		setFirstResult($offset)->
+		getQuery()->
+		getResult();
+          if ( 0 !== \count($firstOffsetRow) ) {
+	     $this->lastId = $firstOffsetRow[0]->getId()-1;
+          }
+        }
+
+        $resultQueryBuilder = clone $queryBuilder;
+        $results = $resultQueryBuilder
+            ->andWhere("$rootAlias.id > $this->lastId")
             ->setMaxResults($limit)
             ->getQuery()
             ->getResult()
